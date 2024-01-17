@@ -11,8 +11,10 @@
 		6E2017932B358059005E9052 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2017922B358059005E9052 /* ContentView.swift */; };
 		6E2017952B35805A005E9052 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E2017942B35805A005E9052 /* Assets.xcassets */; };
 		6E2017982B35805A005E9052 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E2017972B35805A005E9052 /* Preview Assets.xcassets */; };
-		6E8DC81C2B3AC8BA006AFF78 /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E8DC81B2B3AC8BA006AFF78 /* Property List.plist */; };
+		6E63CF1A2B3CB97300B1D8CE /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E63CF192B3CB97300B1D8CE /* ExploreView.swift */; };
+		6E63CF1C2B3CBA0300B1D8CE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E63CF1B2B3CBA0300B1D8CE /* SettingsView.swift */; };
 		6E8DC81E2B3AC936006AFF78 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8DC81D2B3AC936006AFF78 /* HealthKitManager.swift */; };
+		6EE07A8C2B5864ED005737B6 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE07A8B2B5864ED005737B6 /* FavoritesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,8 +23,12 @@
 		6E2017922B358059005E9052 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6E2017942B35805A005E9052 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E2017972B35805A005E9052 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		6E8DC81B2B3AC8BA006AFF78 /* Property List.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
+		6E63CF192B3CB97300B1D8CE /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		6E63CF1B2B3CBA0300B1D8CE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6E8DC81B2B3AC8BA006AFF78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E8DC81D2B3AC936006AFF78 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		6EE07A8A2B58639C005737B6 /* HealthStat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HealthStat.entitlements; sourceTree = "<group>"; };
+		6EE07A8B2B5864ED005737B6 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,9 +61,10 @@
 		6E20178F2B358059005E9052 /* HealthStat */ = {
 			isa = PBXGroup;
 			children = (
-				6E8DC81B2B3AC8BA006AFF78 /* Property List.plist */,
+				6E8DC81B2B3AC8BA006AFF78 /* Info.plist */,
+				6EE07A8A2B58639C005737B6 /* HealthStat.entitlements */,
+				6E63CF1D2B3CBA2600B1D8CE /* Views */,
 				6E2017902B358059005E9052 /* HealthStatApp.swift */,
-				6E2017922B358059005E9052 /* ContentView.swift */,
 				6E2017942B35805A005E9052 /* Assets.xcassets */,
 				6E2017962B35805A005E9052 /* Preview Content */,
 				6E8DC81D2B3AC936006AFF78 /* HealthKitManager.swift */,
@@ -71,6 +78,17 @@
 				6E2017972B35805A005E9052 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6E63CF1D2B3CBA2600B1D8CE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6E2017922B358059005E9052 /* ContentView.swift */,
+				6E63CF192B3CB97300B1D8CE /* ExploreView.swift */,
+				6E63CF1B2B3CBA0300B1D8CE /* SettingsView.swift */,
+				6EE07A8B2B5864ED005737B6 /* FavoritesView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,7 +149,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E8DC81C2B3AC8BA006AFF78 /* Property List.plist in Resources */,
 				6E2017982B35805A005E9052 /* Preview Assets.xcassets in Resources */,
 				6E2017952B35805A005E9052 /* Assets.xcassets in Resources */,
 			);
@@ -144,8 +161,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E63CF1C2B3CBA0300B1D8CE /* SettingsView.swift in Sources */,
 				6E2017932B358059005E9052 /* ContentView.swift in Sources */,
+				6EE07A8C2B5864ED005737B6 /* FavoritesView.swift in Sources */,
 				6E2017912B358059005E9052 /* HealthStatApp.swift in Sources */,
+				6E63CF1A2B3CB97300B1D8CE /* ExploreView.swift in Sources */,
 				6E8DC81E2B3AC936006AFF78 /* HealthKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,11 +297,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HealthStat/HealthStat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HealthStat/Preview Content\"";
+				DEVELOPMENT_TEAM = KR45X7UZ6D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HealthStat/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -307,11 +330,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HealthStat/HealthStat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HealthStat/Preview Content\"";
+				DEVELOPMENT_TEAM = KR45X7UZ6D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HealthStat/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -8,32 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var stepCount: Int = 0
-    private let healthKitManager = HealthKitManager()
-    
     var body: some View {
         TabView {
-            // Tab 1
-            Text("Step Count: \(stepCount)")
+            // Tab "Favorites"
+            FavoritesView()
             .tabItem {
                 Image(systemName: "heart.fill")
                 Text("Favorites")
             }
+            
 
-            // Tab 2
+            // Tab "Eplore"
             NavigationView {
-                List {
-                    ForEach(1...4, id: \.self) { index in
-                        Text("Item \(index)")
-                    }
-                }
+                ExploreView()
                 .navigationTitle("Explore")
             }
             .tabItem {
                 Image(systemName: "globe.europe.africa.fill")
                 Text("Explore")
             }
-            Text("Second View")
+            
+            // Tab "Settings"
+            NavigationView {
+                SettingsView()
+                .navigationTitle("Settings")
+            }
             .tabItem {
                 Image(systemName: "gear")
                 Text("Settings")
