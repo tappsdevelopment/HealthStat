@@ -35,14 +35,12 @@ class HealthKitManager {
             healthStore.execute(query)
         }
     
-    func fetchDistanceWalkingRunning(completion: @escaping (Double?, Error?) -> Void) {
+    func fetchDistanceWalkingRunning(startDate: Date, completion: @escaping (Double?, Error?) -> Void) {
         let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
-        
-        let date = Date()
 
         let cal = NSCalendar(calendarIdentifier: .gregorian)!
 
-        let today = cal.startOfDay(for: date)
+        let today = cal.startOfDay(for: startDate)
 
         let predicate = HKQuery.predicateForSamples(withStart: today, end: NSDate() as Date, options: HKQueryOptions.strictStartDate)
 
