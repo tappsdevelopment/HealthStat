@@ -11,17 +11,26 @@ struct ExploreView: View {
     @State private var stepCount: Int = 0
     @State private var distanceWalkingRunningOverall: Int = 0
     @State private var distanceWalkingRunningToday: Int = 0
+    @State private var distanceTrainings: Int = 0
     private let healthKitManager = HealthKitManager()
     
     var body: some View {
         VStack {
+            Spacer()
             Text("Step Count: \(stepCount)")
-            Text("Distance today: \(distanceWalkingRunningToday)")
-            Text("Distance overall: \(distanceWalkingRunningOverall)")
+            Spacer()
+            Text("Distance today: \(distanceWalkingRunningToday) m")
+            Spacer()
+            Text("Distance overall: \(distanceWalkingRunningOverall) m")
+            Spacer()
+            Text("Distance Trainings: \(distanceTrainings) m")
+            Spacer()
             }.onAppear {
                 healthKitManager.requestAuthorization { success, error in
                     if success {
-                        updateData()
+                        Task {
+                            await updateData()
+                        }
                     } else {
                         // Handle error
                     }
@@ -29,7 +38,7 @@ struct ExploreView: View {
         }
     }
     
-    private func updateData() {
+    private func updateData() async {
         healthKitManager.fetchStepCount { count, error in
             if let count = count {
                 DispatchQueue.main.async {
@@ -61,6 +70,17 @@ struct ExploreView: View {
                 print("Error")
             }
         })
+        
+        await healthKitManager.fetchRunningWorkoutDistance(startDate: NSCalendar(calendarIdentifier: .gregorian)!.startOfDay(for: Date(timeIntervalSince1970: 0)), completion: { count, error in
+            if let count = count {
+                DispatchQueue.main.async {
+                    self.distanceTrainings = Int(count)
+                }
+            } else {
+                // Handle error
+                print("Error")
+            }
+        });
     }
     
 }
