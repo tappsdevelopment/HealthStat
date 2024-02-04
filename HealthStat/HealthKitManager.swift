@@ -101,4 +101,57 @@ class HealthKitManager {
         }
         completion(distance, nil)
     }
+    
+    private func fetchWorkouts() async -> [HKWorkout]? {
+        //let all = HKQuery.predicateForWorkouts(activityPredicate: .init())
+        
+        let samples = try! await withCheckedThrowingContinuation { (continuation: CheckedContinuation<[HKSample], Error>) in
+            healthStore.execute(HKSampleQuery(sampleType: .workoutType(), predicate: .none, limit: HKObjectQueryNoLimit,sortDescriptors: [.init(keyPath: \HKSample.startDate, ascending: false)], resultsHandler: { query, samples, error in
+                if let hasError = error {
+                    continuation.resume(throwing: hasError)
+                    return
+                }
+                
+                guard let samples = samples else {
+                    fatalError("*** Invalid State: This can only fail if there was an error. ***")
+                }
+                
+                continuation.resume(returning: samples)
+            }))
+        }
+        
+        guard let workouts = samples as? [HKWorkout] else {
+            return nil
+        }
+        
+        return workouts
+    }
+    
+    func fetchAllWorkouts(startDate: Date, completion: @escaping (Double?, Error?) -> Void) async {
+        let workouts = await fetchWorkouts()
+        completion(Double(workouts?.count ?? Int(0.0)), nil)
+    }
+    
+    func fetchDaysWithWorkouts(startDate: Date, completion: @escaping (Double?, Error?) -> Void) async {
+        let workouts = await fetchWorkouts()
+        var date = Date()
+        var daysWithWorkouts = 0
+        
+        if (workouts?.isEmpty == false) {
+            date = workouts?[0].startDate ?? Date()
+            daysWithWorkouts += 1
+            
+            for workout in workouts ?? []
+            {
+                if !Calendar.current.isDate(date, equalTo: workout.startDate, toGranularity: .day)
+                {
+                    daysWithWorkouts += 1
+                    date = workout.startDate
+                }
+            }
+        }
+        
+        completion(Double(daysWithWorkouts), nil)
+    }
+    
 }

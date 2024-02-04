@@ -12,6 +12,9 @@ struct ExploreView: View {
     @State private var distanceWalkingRunningOverall: Int = 0
     @State private var distanceWalkingRunningToday: Int = 0
     @State private var distanceTrainings: Int = 0
+    @State private var numberOfWorkouts: Int = 0
+    @State private var numberOfDaysWithWorkouts: Int = 0
+    
     private let healthKitManager = HealthKitManager()
     
     var body: some View {
@@ -24,6 +27,10 @@ struct ExploreView: View {
             Text("Distance overall: \(distanceWalkingRunningOverall) m")
             Spacer()
             Text("Distance Trainings: \(distanceTrainings) m")
+            Spacer()
+            Text("Total Workouts: \(numberOfWorkouts)")
+            Spacer()
+            Text("Days with Workouts: \(numberOfDaysWithWorkouts)")
             Spacer()
             }.onAppear {
                 healthKitManager.requestAuthorization { success, error in
@@ -81,8 +88,29 @@ struct ExploreView: View {
                 print("Error")
             }
         });
+        
+        await healthKitManager.fetchAllWorkouts(startDate: NSCalendar(calendarIdentifier: .gregorian)!.startOfDay(for: Date(timeIntervalSince1970: 0)), completion: { count, error in
+            if let count = count {
+                DispatchQueue.main.async {
+                    self.numberOfWorkouts = Int(count)
+                }
+            } else {
+                // Handle error
+                print("Error")
+            }
+        });
+        
+        await healthKitManager.fetchDaysWithWorkouts(startDate: NSCalendar(calendarIdentifier: .gregorian)!.startOfDay(for: Date(timeIntervalSince1970: 0)), completion: { count, error in
+            if let count = count {
+                DispatchQueue.main.async {
+                    self.numberOfDaysWithWorkouts = Int(count)
+                }
+            } else {
+                // Handle error
+                print("Error")
+            }
+        });
     }
-    
 }
 
 #Preview {
