@@ -18,30 +18,24 @@ struct ExploreView: View {
     private let healthKitManager = HealthKitManager()
     
     var body: some View {
-        VStack {
-            Spacer()
-            Text("Step Count: \(stepCount)")
-            Spacer()
-            Text("Distance today: \(distanceWalkingRunningToday) m")
-            Spacer()
-            Text("Distance overall: \(distanceWalkingRunningOverall) m")
-            Spacer()
-            Text("Distance Trainings: \(distanceTrainings) m")
-            Spacer()
-            Text("Total Workouts: \(numberOfWorkouts)")
-            Spacer()
-            Text("Days with Workouts: \(numberOfDaysWithWorkouts)")
-            Spacer()
-            }.onAppear {
-                healthKitManager.requestAuthorization { success, error in
-                    if success {
-                        Task {
-                            await updateData()
-                        }
-                    } else {
-                        // Handle error
+        List {
+            ExploreListElementView(elementLabel: "Step count", elementValue: String(stepCount), elementColor: .white)
+            ExploreListElementView(elementLabel: "Distance today", elementValue: String(distanceWalkingRunningToday), elementColor: .white)
+            ExploreListElementView(elementLabel: "Distance overall", elementValue: String(distanceWalkingRunningOverall), elementColor: .white)
+            ExploreListElementView(elementLabel: "Distance Trainings", elementValue: String(distanceTrainings), elementColor: .white)
+            ExploreListElementView(elementLabel: "Total Workouts", elementValue: String(numberOfWorkouts), elementColor: .white)
+            ExploreListElementView(elementLabel: "Days with Workouts", elementValue: String(numberOfDaysWithWorkouts), elementColor: .white)
+            
+        }.onAppear {
+            healthKitManager.requestAuthorization { success, error in
+                if success {
+                    Task {
+                        await updateData()
                     }
+                } else {
+                    // Handle error
                 }
+            }
         }
     }
     
