@@ -129,7 +129,6 @@ class HealthKitManager {
     
     func fetchAllWorkouts(startDate: Date, completion: @escaping ([HKWorkout]?, Error?) -> Void) async {
         guard let workouts = await fetchWorkouts() else {return}
-        //completion(Double(workouts?.count ?? Int(0.0)), nil)
                 completion(workouts ?? [HKWorkout](), nil)
     }
     
