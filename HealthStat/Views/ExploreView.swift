@@ -23,7 +23,11 @@ struct ExploreView: View {
             ExploreListElementView(elementLabel: "Distance today", elementValue: String(distanceWalkingRunningToday), elementColor: .white)
             ExploreListElementView(elementLabel: "Distance overall", elementValue: String(distanceWalkingRunningOverall), elementColor: .white)
             ExploreListElementView(elementLabel: "Distance Trainings", elementValue: String(distanceTrainings), elementColor: .white)
-            ExploreListElementView(elementLabel: "Total Workouts", elementValue: String(numberOfWorkouts), elementColor: .white)
+            NavigationLink {
+                WorkoutStatView()
+            } label: {
+                ExploreListElementView(elementLabel: "Total Workouts", elementValue: String(numberOfWorkouts), elementColor: .white)
+            }
             ExploreListElementView(elementLabel: "Days with Workouts", elementValue: String(numberOfDaysWithWorkouts), elementColor: .white)
             
         }.onAppear {
@@ -83,8 +87,8 @@ struct ExploreView: View {
             }
         });
         
-        await healthKitManager.fetchAllWorkouts(startDate: NSCalendar(calendarIdentifier: .gregorian)!.startOfDay(for: Date(timeIntervalSince1970: 0)), completion: { count, error in
-            if let count = count {
+        await healthKitManager.fetchAllWorkouts(startDate: NSCalendar(calendarIdentifier: .gregorian)!.startOfDay(for: Date(timeIntervalSince1970: 0)), completion: { workouts, error in
+            if let count = workouts?.count {
                 DispatchQueue.main.async {
                     self.numberOfWorkouts = Int(count)
                 }

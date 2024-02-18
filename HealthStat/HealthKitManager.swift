@@ -121,15 +121,16 @@ class HealthKitManager {
         }
         
         guard let workouts = samples as? [HKWorkout] else {
-            return nil
+            return [HKWorkout]()
         }
         
         return workouts
     }
     
-    func fetchAllWorkouts(startDate: Date, completion: @escaping (Double?, Error?) -> Void) async {
-        let workouts = await fetchWorkouts()
-        completion(Double(workouts?.count ?? Int(0.0)), nil)
+    func fetchAllWorkouts(startDate: Date, completion: @escaping ([HKWorkout]?, Error?) -> Void) async {
+        guard let workouts = await fetchWorkouts() else {return}
+        //completion(Double(workouts?.count ?? Int(0.0)), nil)
+                completion(workouts ?? [HKWorkout](), nil)
     }
     
     func fetchDaysWithWorkouts(startDate: Date, completion: @escaping (Double?, Error?) -> Void) async {

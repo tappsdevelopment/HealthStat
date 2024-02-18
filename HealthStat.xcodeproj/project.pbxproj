@@ -14,6 +14,7 @@
 		6E63CF1A2B3CB97300B1D8CE /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E63CF192B3CB97300B1D8CE /* ExploreView.swift */; };
 		6E63CF1C2B3CBA0300B1D8CE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E63CF1B2B3CBA0300B1D8CE /* SettingsView.swift */; };
 		6E7792602B62D737005FDD69 /* ExploreListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E77925F2B62D737005FDD69 /* ExploreListItem.swift */; };
+		6E82CC882B828DF500513470 /* WorkoutStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E82CC872B828DF500513470 /* WorkoutStatView.swift */; };
 		6E8DC81E2B3AC936006AFF78 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8DC81D2B3AC936006AFF78 /* HealthKitManager.swift */; };
 		6ED9C4E42B716CFC000334EC /* ExploreListElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED9C4E32B716CFC000334EC /* ExploreListElementView.swift */; };
 		6EE07A8C2B5864ED005737B6 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE07A8B2B5864ED005737B6 /* FavoritesView.swift */; };
@@ -28,6 +29,7 @@
 		6E63CF192B3CB97300B1D8CE /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		6E63CF1B2B3CBA0300B1D8CE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6E77925F2B62D737005FDD69 /* ExploreListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreListItem.swift; sourceTree = "<group>"; };
+		6E82CC872B828DF500513470 /* WorkoutStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutStatView.swift; sourceTree = "<group>"; };
 		6E8DC81B2B3AC8BA006AFF78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E8DC81D2B3AC936006AFF78 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		6ED9C4E32B716CFC000334EC /* ExploreListElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreListElementView.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				6E63CF1B2B3CBA0300B1D8CE /* SettingsView.swift */,
 				6EE07A8B2B5864ED005737B6 /* FavoritesView.swift */,
 				6ED9C4E32B716CFC000334EC /* ExploreListElementView.swift */,
+				6E82CC872B828DF500513470 /* WorkoutStatView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			files = (
 				6E7792602B62D737005FDD69 /* ExploreListItem.swift in Sources */,
 				6E63CF1C2B3CBA0300B1D8CE /* SettingsView.swift in Sources */,
+				6E82CC882B828DF500513470 /* WorkoutStatView.swift in Sources */,
 				6E2017932B358059005E9052 /* ContentView.swift in Sources */,
 				6EE07A8C2B5864ED005737B6 /* FavoritesView.swift in Sources */,
 				6E2017912B358059005E9052 /* HealthStatApp.swift in Sources */,
