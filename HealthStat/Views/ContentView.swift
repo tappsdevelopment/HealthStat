@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    private var healthData = HealthData()
     var body: some View {
         TabView {
             // Tab "Favorites"
@@ -20,7 +21,7 @@ struct ContentView: View {
 
             // Tab "Eplore"
             NavigationView {
-                ExploreView()
+                ExploreView(healthData: healthData)
                 .navigationTitle("Explore")
             }
             .tabItem {
