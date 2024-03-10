@@ -11,22 +11,21 @@ struct ContentView: View {
     private var healthData = HealthData()
     var body: some View {
         TabView {
+            // Tab "Browse"
+            NavigationView {
+                ExploreView(healthData: healthData)
+                .navigationTitle("Browse")
+            }
+            .tabItem {
+                Image(systemName: "square.grid.2x2.fill")
+                Text("Browse")
+            }
+            
             // Tab "Favorites"
             FavoritesView()
             .tabItem {
                 Image(systemName: "heart.fill")
                 Text("Favorites")
-            }
-            
-
-            // Tab "Eplore"
-            NavigationView {
-                ExploreView(healthData: healthData)
-                .navigationTitle("Explore")
-            }
-            .tabItem {
-                Image(systemName: "globe.europe.africa.fill")
-                Text("Explore")
             }
             
             // Tab "Settings"
