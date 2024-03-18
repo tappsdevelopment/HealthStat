@@ -9,6 +9,13 @@ import SwiftUI
 import HealthKit
 import Charts
 
+struct WorkoutCount: Identifiable {
+    let id = UUID()
+    var type: HKWorkoutActivityType
+    var count: Int
+    var name: String
+}
+
 struct WorkoutStatView: View {
     var workouts: [HKWorkout]
     private var firstYear: Int
@@ -16,6 +23,7 @@ struct WorkoutStatView: View {
     private var workoutsPerMonth: [Int]
     private var workoutDaysPerMonth: [Int]
     private var workoutDaysPerMonthPercentage: [Float]
+    private var workoutTypeCount: [WorkoutCount]
     private let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
     init(myWorkouts: [HKWorkout]) {
@@ -25,10 +33,12 @@ struct WorkoutStatView: View {
         self.workoutsPerMonth = [Int]()
         self.workoutDaysPerMonth = [Int]()
         self.workoutDaysPerMonthPercentage = [Float]()
+        self.workoutTypeCount = [WorkoutCount]()
         self.CountWorkoutsPerYear()
         self.CountWorkoutsPerMonth()
         self.CountWorkoutDaysPerMonth()
         self.CalcDaysPerMonthPercentage()
+        self.SortWorkoutTypesPerYear()
     }
     
     mutating func CountWorkoutsPerMonth() {
@@ -72,6 +82,24 @@ struct WorkoutStatView: View {
             for workout in workouts {
                 var year = Calendar.current.component(.year, from: workout.startDate)
                 self.workoutsPerYear[year - self.firstYear] = self.workoutsPerYear[year - self.firstYear] + 1
+            }
+        }
+    }
+    
+    mutating func SortWorkoutTypesPerYear() {
+        var workoutTypeFound: Bool
+        
+        for workout in workouts {
+            workoutTypeFound = false
+            for var workoutType in workoutTypeCount {
+                if (workoutType.type == workout.workoutActivityType) {
+                    workoutType.count = workoutType.count + 1
+                    workoutTypeFound = true
+                }
+            }
+            
+            if (workoutTypeFound == false) {
+                self.workoutTypeCount.append(WorkoutCount(type: workout.workoutActivityType, count: 1, name: workout.workoutActivityType.name))
             }
         }
     }
@@ -283,115 +311,146 @@ struct WorkoutStatView: View {
                 Chart {
                     BarMark(
                         x: .value("Month", "Jan"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[0])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[0] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Jan"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[0])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[0]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Feb"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[1])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[1] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Feb"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[1])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[1]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Mar"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[2])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[2] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Mar"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[2])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[2]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Apr"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[3])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[3] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Apr"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[3])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[3]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "May"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[4])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[4] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "May"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[4])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[4]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Jun"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[5])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[5] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Jun"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[5])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[5]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Jul"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[6])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[6] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Jul"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[6])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[6]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Aug"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[7])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[7] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Aug"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[7])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[7]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Sep"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[8])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[8] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Sep"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[8])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[8]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Oct"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[9])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[9] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Oct"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[9])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[9]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Nov"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[10])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[10] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Nov"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[10])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[10]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                     BarMark(
                         x: .value("Month", "Dec"),
-                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[11])
+                        y: .value("Number of Workout days", workoutDaysPerMonthPercentage[11] * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor1)
                     BarMark(
                         x: .value("Month", "Dec"),
-                        y: .value("Number of Workout days", 1.0 - workoutDaysPerMonthPercentage[11])
+                        y: .value("Number of Workout days", (1.0 - workoutDaysPerMonthPercentage[11]) * 100)
                     ).foregroundStyle(Constants.Colors.TrainingRingColor2.opacity(0.25))
                     
                 }.frame(height: 250)
-                    .chartYScale(domain: 0...1.0)
+                .chartYScale(domain: 0...100)
+                .chartYAxis {
+                   AxisMarks() {
+                       let value = $0.as(Int.self)!
+                       AxisValueLabel {
+                           Text("\(value)%")
+                       }
+                   }
+                }
             }
+            Spacer()
+            
+            // Workout type statstics
+            Text("Workouts types")
+                .font(.title2)
+                .padding(.top, 20.0)
+            Chart(workoutTypeCount) { workoutType in
+                SectorMark(
+                    angle: .value(
+                        Text(verbatim: workoutType.name),
+                        workoutType.count
+                    ),
+                    innerRadius: .ratio(0.6),
+                    angularInset: 2
+                )
+                .foregroundStyle(
+                    by: .value(
+                        Text(verbatim: workoutType.name),
+                        workoutType.name
+                    )
+                )
+            }
+            .frame(height: 250)
         }
         .padding(.horizontal)
     }
