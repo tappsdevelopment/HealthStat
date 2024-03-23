@@ -26,6 +26,8 @@ struct WorkoutStatView: View {
     private var workoutTypeCount: [WorkoutCount]
     private var workoutTypeDuration: [WorkoutCount]
     private var workoutTypeCalories: [WorkoutCount]
+    @State var WorkoutChartSelection = "Count"
+    private let WorkoutChartSelectionItems = ["Count", "Duration", "Calories"]
     private let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
     init(myWorkouts: [HKWorkout]) {
@@ -130,6 +132,13 @@ struct WorkoutStatView: View {
             self.workoutDaysPerMonthPercentage[i] = Float(self.workoutDaysPerMonth[i]) / Float(daysPerMonth[i])
         }
     }
+    
+    func timeFormatted(totalSeconds: Int) -> String {
+        let seconds: Int = totalSeconds % 60
+        let minutes: Int = (totalSeconds / 60) % 60
+        let hours: Int = totalSeconds / 3600
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+     }
     
     var body: some View {
         ScrollView {
@@ -451,87 +460,92 @@ struct WorkoutStatView: View {
             Spacer()
             
             // Workout type statstics
-            Text("Workouts types (count)")
+            Text("Workouts types (\(WorkoutChartSelection))")
                 .font(.title2)
                 .padding(.top, 20.0)
             
-            /*Picker("Criteria", selection: $WorkoutTypeChart) {
-                ForEach(WorkoutTypeChartValues, id: \.self) {
+            Picker("Criteria", selection: $WorkoutChartSelection) {
+                ForEach(WorkoutChartSelectionItems, id: \.self) {
                     Text($0)
                 }
             }
             .pickerStyle(.menu)
-            .onChange(of: WorkoutTypeChart, perform: { _ in
-                
-                //self.CountWorkoutsPerYear()
-                
-            })*/
             
-            Chart(workoutTypeCount) { workoutType in
-                SectorMark(
-                    angle: .value(
-                        Text(verbatim: workoutType.name),
-                        workoutType.value
-                    ),
-                    innerRadius: .ratio(0.6),
-                    angularInset: 2
-                )
-                .foregroundStyle(
-                    by: .value(
-                        Text(verbatim: workoutType.name),
-                        workoutType.name
+            switch (WorkoutChartSelection)
+            {
+            case "Count":
+                Chart(workoutTypeCount) { workoutType in
+                    SectorMark(
+                        angle: .value(
+                            Text(verbatim: workoutType.name),
+                            workoutType.value
+                        ),
+                        innerRadius: .ratio(0.6),
+                        angularInset: 2
                     )
-                )
-                .annotation(position: .overlay, alignment: .center, spacing: 0) {
-                    Text(verbatim: String(Int(workoutType.value)))
-                        .font(.caption)
+                    .foregroundStyle(
+                        by: .value(
+                            Text(verbatim: workoutType.name),
+                            workoutType.name
+                        )
+                    )
+                    .annotation(position: .overlay, alignment: .center, spacing: 0) {
+                        Text(verbatim: String(Int(workoutType.value)))
+                            .font(.caption)
+                    }
                 }
-            }
-            .frame(height: 250)
-            
-            Text("Workouts types (duration)")
-                .font(.title2)
-                .padding(.top, 20.0)
-
-            Chart(workoutTypeDuration) { workoutType in
-                SectorMark(
-                    angle: .value(
-                        Text(verbatim: workoutType.name),
-                        workoutType.value
-                    ),
-                    innerRadius: .ratio(0.6),
-                    angularInset: 2
-                )
-                .foregroundStyle(
-                    by: .value(
-                        Text(verbatim: workoutType.name),
-                        workoutType.name
+                .frame(height: 250)
+                
+                Spacer()
+                
+            case "Duration":
+                Chart(workoutTypeDuration) { workoutType in
+                    SectorMark(
+                        angle: .value(
+                            Text(verbatim: workoutType.name),
+                            workoutType.value
+                        ),
+                        innerRadius: .ratio(0.6),
+                        angularInset: 2
                     )
-                )
-            }
-            .frame(height: 250)
-            
-            Text("Workouts types (calories)")
-                .font(.title2)
-                .padding(.top, 20.0)
-
-            Chart(workoutTypeCalories) { workoutType in
-                SectorMark(
-                    angle: .value(
-                        Text(verbatim: workoutType.name),
-                        workoutType.value
-                    ),
-                    innerRadius: .ratio(0.6),
-                    angularInset: 2
-                )
-                .foregroundStyle(
-                    by: .value(
-                        Text(verbatim: workoutType.name),
-                        workoutType.name
+                    .foregroundStyle(
+                        by: .value(
+                            Text(verbatim: workoutType.name),
+                            workoutType.name
+                        )
                     )
-                )
+                    .annotation(position: .overlay, alignment: .center, spacing: 0) {
+                        Text(verbatim: timeFormatted(totalSeconds: Int(workoutType.value)))
+                            .font(.caption)
+                    }
+                }
+                .frame(height: 250)
+                
+            case "Calories":
+                Chart(workoutTypeCalories) { workoutType in
+                    SectorMark(
+                        angle: .value(
+                            Text(verbatim: workoutType.name),
+                            workoutType.value
+                        ),
+                        innerRadius: .ratio(0.6),
+                        angularInset: 2
+                    )
+                    .foregroundStyle(
+                        by: .value(
+                            Text(verbatim: workoutType.name),
+                            workoutType.name
+                        )
+                    )
+                    .annotation(position: .overlay, alignment: .center, spacing: 0) {
+                        Text(verbatim: String(Int(workoutType.value)))
+                            .font(.caption)
+                    }
+                }
+                .frame(height: 250)
+            default:
+                Text("Nothing selected")
             }
-            .frame(height: 250)
         }
         .padding(.horizontal)
     }
