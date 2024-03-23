@@ -12,7 +12,7 @@ import Charts
 struct WorkoutCount: Identifiable {
     let id = UUID()
     var type: HKWorkoutActivityType
-    var count: Int
+    var value: Double
     var name: String
 }
 
@@ -24,6 +24,8 @@ struct WorkoutStatView: View {
     private var workoutDaysPerMonth: [Int]
     private var workoutDaysPerMonthPercentage: [Float]
     private var workoutTypeCount: [WorkoutCount]
+    private var workoutTypeDuration: [WorkoutCount]
+    private var workoutTypeCalories: [WorkoutCount]
     private let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
     init(myWorkouts: [HKWorkout]) {
@@ -34,11 +36,13 @@ struct WorkoutStatView: View {
         self.workoutDaysPerMonth = [Int]()
         self.workoutDaysPerMonthPercentage = [Float]()
         self.workoutTypeCount = [WorkoutCount]()
+        self.workoutTypeDuration = [WorkoutCount]()
+        self.workoutTypeCalories = [WorkoutCount]()
         self.CountWorkoutsPerYear()
         self.CountWorkoutsPerMonth()
         self.CountWorkoutDaysPerMonth()
         self.CalcDaysPerMonthPercentage()
-        self.SortWorkoutTypesPerYear()
+        self.CreateWorkoutTypesStatistics()
     }
     
     mutating func CountWorkoutsPerMonth() {
@@ -80,26 +84,42 @@ struct WorkoutStatView: View {
             self.workoutsPerYear = [Int](repeating: 0, count: (self.firstYear - Calendar.current.component(.year, from: Date())) + 1)
 
             for workout in workouts {
-                var year = Calendar.current.component(.year, from: workout.startDate)
+                let year = Calendar.current.component(.year, from: workout.startDate)
                 self.workoutsPerYear[year - self.firstYear] = self.workoutsPerYear[year - self.firstYear] + 1
             }
         }
     }
     
-    mutating func SortWorkoutTypesPerYear() {
+    mutating func CreateWorkoutTypesStatistics() {
         var workoutTypeFound: Bool
         
         for workout in workouts {
             workoutTypeFound = false
-            for var workoutType in workoutTypeCount {
-                if (workoutType.type == workout.workoutActivityType) {
-                    workoutType.count = workoutType.count + 1
+            for i in workoutTypeCount.indices {
+                if (workoutTypeCount[i].type == workout.workoutActivityType) {
+                    workoutTypeCount[i].value = workoutTypeCount[i].value + 1
+                    workoutTypeFound = true
+                }
+            }
+            
+            for i in workoutTypeDuration.indices {
+                if (workoutTypeDuration[i].type == workout.workoutActivityType) {
+                    workoutTypeDuration[i].value = workoutTypeDuration[i].value + workout.duration.rounded()
+                    workoutTypeFound = true
+                }
+            }
+            
+            for i in workoutTypeCalories.indices {
+                if (workoutTypeCalories[i].type == workout.workoutActivityType) {
+                    workoutTypeCalories[i].value = workoutTypeCalories[i].value + (workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0.0)
                     workoutTypeFound = true
                 }
             }
             
             if (workoutTypeFound == false) {
-                self.workoutTypeCount.append(WorkoutCount(type: workout.workoutActivityType, count: 1, name: workout.workoutActivityType.name))
+                self.workoutTypeCount.append(WorkoutCount(type: workout.workoutActivityType, value: 1, name: workout.workoutActivityType.name))
+                self.workoutTypeDuration.append(WorkoutCount(type: workout.workoutActivityType, value: workout.duration.rounded(), name: workout.workoutActivityType.name))
+                self.workoutTypeCalories.append(WorkoutCount(type: workout.workoutActivityType, value: workout.statistics(for: HKQuantityType(.activeEnergyBurned))?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0.0, name: workout.workoutActivityType.name))
             }
         }
     }
@@ -431,14 +451,75 @@ struct WorkoutStatView: View {
             Spacer()
             
             // Workout type statstics
-            Text("Workouts types")
+            Text("Workouts types (count)")
                 .font(.title2)
                 .padding(.top, 20.0)
+            
+            /*Picker("Criteria", selection: $WorkoutTypeChart) {
+                ForEach(WorkoutTypeChartValues, id: \.self) {
+                    Text($0)
+                }
+            }
+            .pickerStyle(.menu)
+            .onChange(of: WorkoutTypeChart, perform: { _ in
+                
+                //self.CountWorkoutsPerYear()
+                
+            })*/
+            
             Chart(workoutTypeCount) { workoutType in
                 SectorMark(
                     angle: .value(
                         Text(verbatim: workoutType.name),
-                        workoutType.count
+                        workoutType.value
+                    ),
+                    innerRadius: .ratio(0.6),
+                    angularInset: 2
+                )
+                .foregroundStyle(
+                    by: .value(
+                        Text(verbatim: workoutType.name),
+                        workoutType.name
+                    )
+                )
+                .annotation(position: .overlay, alignment: .center, spacing: 0) {
+                    Text(verbatim: String(Int(workoutType.value)))
+                        .font(.caption)
+                }
+            }
+            .frame(height: 250)
+            
+            Text("Workouts types (duration)")
+                .font(.title2)
+                .padding(.top, 20.0)
+
+            Chart(workoutTypeDuration) { workoutType in
+                SectorMark(
+                    angle: .value(
+                        Text(verbatim: workoutType.name),
+                        workoutType.value
+                    ),
+                    innerRadius: .ratio(0.6),
+                    angularInset: 2
+                )
+                .foregroundStyle(
+                    by: .value(
+                        Text(verbatim: workoutType.name),
+                        workoutType.name
+                    )
+                )
+            }
+            .frame(height: 250)
+            
+            Text("Workouts types (calories)")
+                .font(.title2)
+                .padding(.top, 20.0)
+
+            Chart(workoutTypeCalories) { workoutType in
+                SectorMark(
+                    angle: .value(
+                        Text(verbatim: workoutType.name),
+                        workoutType.value
                     ),
                     innerRadius: .ratio(0.6),
                     angularInset: 2
